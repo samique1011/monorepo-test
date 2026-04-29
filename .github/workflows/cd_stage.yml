@@ -19,6 +19,7 @@ jobs :
                    cd /data/monorepo-test/
                    git pull
                    source ~/.bashrc
+                   npm install -g pnpm
                    pnpm install
                    pnpm run build
                    pm2 restart all
