@@ -1,3 +1,27 @@
-name : "Production Deployment";
+name: Deploy to production
 on : 
-    
+    push:
+        branches:
+            - "production"
+
+jobs : 
+    redeploy_everything:
+        name : Deploying everything to the production
+        runs-on : ubuntu-latest
+        steps:
+            - name: Deploy to ec2
+              uses : appleboy/ssh-action@v1.0.3
+              with :
+                host: ${{secrets.EC2_PRODUCTION_IP}}
+                username: ${{secrets.EC2_USERNAME}}
+                key: ${{secrets.SSH_STAGING_PVT_KEY}}
+                script_stop: true
+                script: |
+                    cd /data/monorepo-test
+                    git pull origin production
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+                    pnpm install
+                    pnpm run build
+                    pm2 restart all
+
