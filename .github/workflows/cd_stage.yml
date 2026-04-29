@@ -18,6 +18,7 @@ jobs :
                  ssh -o StrictHostKeyChecking=no -i ~/ssh_key.pem ubuntu@${{secrets.EC2_STAGING_IP}} << 'EOF'
                    cd /data/monorepo-test/
                    git pull
+                   rm -rf .next
                    pnpm install
                    pnpm build
                    pm2 restart all
