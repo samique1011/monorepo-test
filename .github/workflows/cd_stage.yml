@@ -19,7 +19,7 @@ jobs :
                    cd /data/monorepo-test/
                    git pull
                    pnpm install
-                   pnpm run build
+                   pnpm build
                    pm2 restart all
                  EOF
 

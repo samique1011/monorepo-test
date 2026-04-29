@@ -24,6 +24,7 @@ export default function Home(){
     }
     return <div>
         <p>This is the signin page</p>
+        <p>This is a signin page pt2</p>
         <input type="text" ref={u_ref}></input>
         <input type="text" ref={p_ref}></input>
         <button onClick={submitHandler}>Submit</button>
