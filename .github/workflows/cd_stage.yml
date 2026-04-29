@@ -15,6 +15,12 @@ jobs :
                  chmod 400 ~/ssh_key.pem
             - name: Deploy to EC2
               run :  |
-                 ssh -o StrictHostKeyChecking=no -i ~/ssh_key.pem ubuntu@${{secrets.EC2_STAGING_IP}} -t "cd /data/monorepo-test/ && git pull origin main && pnpm install && pnpm run build && pm2 restart all"
+                 ssh -o StrictHostKeyChecking=no -i ~/ssh_key.pem ubuntu@${{secrets.EC2_STAGING_IP}} ssh -o StrictHostKeyChecking=no -i ~/ssh_key.pem ubuntu@${{ secrets.EC2_STAGING_IP }} \
+                 "cd /data/monorepo-test && \
+                 corepack enable && \
+                 corepack prepare pnpm@9.0.0 --activate && \
+                 pnpm install && \
+                 pnpm run build
+                 pm2 restart all"
                  EOF
 
