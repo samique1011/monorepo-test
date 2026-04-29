@@ -17,7 +17,7 @@ jobs :
                 key: ${{secrets.SSH_STAGING_PVT_KEY}}
                 script_stop: true
                 script: |
-                    cd /data/monorepo-test
+                    cd /home/ubuntu/monorepo-test/
                     git pull origin production
                     export NVM_DIR="$HOME/.nvm"
                     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
