@@ -1,0 +1,25 @@
+name: Deploy to staging
+on : 
+    push:
+        branches:
+            - "main"
+
+jobs : 
+    redeploy_everything:
+        name : Deploying everything to the staging cluster
+        runs-on : ubuntu-latest
+        steps:
+            - name: Store SSH key 
+              run: | 
+                 echo "${{ secrets.SSH_STAGING_PVT_KEY }}" > ~/ssh_key.pem 
+                 chmod 400 ~/ssh_key.pem
+            - name: Deploy to EC2
+              run :  |
+                 ssh -o StrictHostKeyChecking=no -i ~/ssh_key.pem ubuntu@${{secrets.EC2_STAGING_IP}} << 'EOF'
+                   cd /data/monorepo-test/
+                   git pull
+                   pnpm install
+                   pnpm run build
+                   pm2 restart all
+                 EOF
+
