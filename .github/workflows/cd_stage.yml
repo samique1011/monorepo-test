@@ -9,18 +9,17 @@ jobs :
         name : Deploying everything to the staging cluster
         runs-on : ubuntu-latest
         steps:
-            - name: Store SSH key 
-              run: | 
-                 echo "${{ secrets.SSH_STAGING_PVT_KEY }}" > ~/ssh_key.pem 
-                 chmod 400 ~/ssh_key.pem
-            - name: Deploy to EC2
-              run :  |
-                 ssh -o StrictHostKeyChecking=no -i ~/ssh_key.pem ubuntu@${{secrets.EC2_STAGING_IP}} << 'EOF'
-                   set -e # 🔴 load nvm properly export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                   cd /data/monorepo-test/ git pull origin main # debug (optional first time) 
-                   node -v 
-                   pnpm -v
-                   pnpm install
-                   pnpm run build
-                   pm2 restart all
-                 EOF
+            - name: Deploy to ec2
+              uses : appleboy/ssh-action@v1.0.3
+              with :
+                host: ${{secrets.EC2_STAGING_IP}}
+                username: ${{secrets.EC2_USERNAME}}
+                key: ${{secrets.SSH_STAGING_PVT_KEY}}
+                script_stop: true
+                script: |
+                    cd /data/monorepo-test
+                    git pull origin main
+                    pnpm install
+                    pnpm run build
+                    pm2 restart all
+
