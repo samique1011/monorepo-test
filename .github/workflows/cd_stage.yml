@@ -20,7 +20,7 @@ jobs :
                    git pull
                    rm -rf apps/web/.next
                    pnpm install
-                   pnpm build
+                   pnpm run build
                    pm2 restart all
                  EOF
 
