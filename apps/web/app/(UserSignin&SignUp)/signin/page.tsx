@@ -28,6 +28,7 @@ export default function Home(){
         <p>This is check number 3</p>
         <p>This is check number 4</p>
         <p>Check number 5</p>
+        <p>Random test</p>
         <input type="text" ref={u_ref}></input>
         <input type="text" ref={p_ref}></input>
         <button onClick={submitHandler}>Submit</button>
